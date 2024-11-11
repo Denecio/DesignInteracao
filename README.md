@@ -1,1 +1,1 @@
-Website for scholl project
+Website for school project
