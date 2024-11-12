@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Grandstander';
+  src: url('./assets/fonts/Grandstander.ttf');
+}
+
 *{
   margin: 0;
   padding: 0;
@@ -5,4 +10,8 @@
   list-style: none;
   text-decoration: none;
   font-synthesis: none;
+}
+
+:root{
+  font-family: 'Grandstander';
 }
