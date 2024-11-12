@@ -3,6 +3,8 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Drawing from './pages/mobile/Drawing';
 import EnterRoom from './pages/mobile/EnterRoom';
+import InfoGiver from './components/infogiver';
+
 
 function App() {
   return (
