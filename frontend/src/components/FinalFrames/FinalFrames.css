@@ -1,0 +1,18 @@
+.final_frames{
+    position: relative;
+    width: 100%;
+}
+
+.framesimage{
+    border-radius: 20px;
+    border: 1px solid; 
+    width: 100%;
+}
+
+.framestext{
+    position: absolute;
+    top: 0;
+    left: 0;
+    translate: -50% -50%;
+
+}
