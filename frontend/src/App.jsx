@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Drawing from './pages/mobile/Drawing';
 import EnterRoom from './pages/mobile/EnterRoom';
 import WaitingRoom from './pages/desktop/WaitingRoom';
+import InfoGiver from './components/infogiver';
 
 function App() {
   return (
