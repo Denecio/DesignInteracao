@@ -11,15 +11,15 @@
 
 
   .enterroom_container {
-    height: 100px;
     width: 70%;
+    padding: 1rem;
+    gap: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    border: 1px solid;
-
+    border: 1px solid; 
   }
 
   .enterroom_input {
@@ -43,6 +43,4 @@
     border: none;
     background-color: #e2e2e2;
   }
-
-
 }
