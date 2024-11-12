@@ -23,9 +23,17 @@ io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
   // Listen for drawing events
-  socket.on('drawing', (data) => {
-    // Broadcast drawing data to other clients
-    socket.broadcast.emit('drawing', data);
+  socket.on('join-room', (roomID, callback) => {
+    if (roomID) {
+        socket.join(roomID);
+        console.log(`User ${socket.id} joined room ${roomID}`);
+
+        // Send a success response to the client
+        callback({ success: true });
+    } else {
+        // Send a failure response to the client
+        callback({ success: false, message: 'Room ID is required' });
+    }
   });
 
   // Handle client disconnection
