@@ -1,5 +1,5 @@
 import "./infogiver.css"
-import check from "../../assets/icons/check.png"
+import check from "../../../assets/icons/check.png"
 
 const InfoGiver = ({ text, role }) => {
   return (
