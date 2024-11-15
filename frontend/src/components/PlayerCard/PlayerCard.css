@@ -1,0 +1,8 @@
+.player_card{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background-color: #E2E2E2;
+    border-radius: 10000rem;
+}
