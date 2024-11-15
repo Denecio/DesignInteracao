@@ -36,11 +36,13 @@
   }
 
 
-  .check_button {
-    width: 20%;
-    align-items: center;
-    border-radius: 10px;
-    border: none;
-    background-color: #e2e2e2;
-  }
+}
+
+.check_button {
+  width: 20%;
+  align-items: center;
+  border-radius: 10px;
+  border: none;
+  background-color: #e2e2e2;
+  cursor: pointer;
 }

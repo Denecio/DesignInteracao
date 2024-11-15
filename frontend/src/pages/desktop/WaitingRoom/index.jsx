@@ -14,6 +14,7 @@ const WaitingRoom = () => {
     useEffect(() => {
         // Emit a "load-room" event to the server with the room ID
         socket.emit("load-room", roomID, (response) => {
+            console.log(response);
             if (response.success) {
                 setUsers(response.users);
             } else {
@@ -25,6 +26,17 @@ const WaitingRoom = () => {
             socket.off("room-users");
         };
     }, [roomID]);
+
+    const handleCheck = () => {
+        console.log("Check");
+        socket.emit("start-game", roomID, (response) => {
+            if (!response.success) {
+                alert(response.message || "Failed to start game");
+            } else
+                window.location.href = `/story/${roomID}`;
+            
+        })
+    }
 
     return (
         <div className="waitingroom_page">
@@ -43,7 +55,7 @@ const WaitingRoom = () => {
             <div className="waintingroom_end">
                 <h3>Estão todos?</h3>
                 <div></div>
-                <button className="check_button"> <img src={check} alt="Confirm" /> </button>
+                <button className="check_button" onClick={ handleCheck }> <img src={check} alt="Confirm" /> </button>
             </div>
         </div>
     );
