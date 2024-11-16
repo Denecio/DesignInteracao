@@ -1,7 +1,7 @@
 // frontend/src/App.js
 
 import React from 'react';
-import Canvas from '../../../components/Canvas';
+import Canvas from '../Canvas';
 
 function Drawing() {
   return (

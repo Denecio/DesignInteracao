@@ -1,8 +1,9 @@
 import './App.css'
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Drawing from './pages/mobile/Drawing';
+import Drawing from './components/Drawing';
 import EnterRoom from './pages/mobile/EnterRoom';
+import DrawingPage from './pages/mobile/DrawingPage';
 import ArrangeFrames from './pages/mobile/ArrangeFrames';
 import WaitingRoom from './pages/desktop/WaitingRoom';
 import Loading from './pages/mobile/Loading';
@@ -14,6 +15,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/DrawingPage" element={<DrawingPage />} />
         <Route path="/drawing/:id" element={<Drawing />} />
         <Route path="/" element={<EnterRoom />} />
         <Route path="/ArrangeFrames/:id" element={<ArrangeFrames />} />
