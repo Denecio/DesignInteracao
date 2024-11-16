@@ -5,15 +5,17 @@ import { io } from "socket.io-client";
 
 const socket = io("http://localhost:8000");
 
-const StoryGiver = () => {
+const RoleGiver = () => {
     const { id: roomID } = useParams();
-    const [story, setStory] = useState(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         // Emit a "get-story" event to the server with the room ID
-        socket.emit("get-story", roomID, (response) => {
+        socket.emit("get-role", roomID, (response) => {
             if (response.success) {
-                setStory(response.story);
+                let username = localStorage.getItem("username");
+                let role = response.role.find(user => user.username === username);
+                setRole(role.role);
             } else {
                 alert(response.message || "Failed to get story");
             }
@@ -26,9 +28,9 @@ const StoryGiver = () => {
 
     return (
         <div className="storygiver_page">
-            <InfoGiver text="Era uma vez..." role={story?.title} url={`/role/${roomID}`}/>
+            <InfoGiver text="Nesta ronda és" role={role} url={`/`}/>
         </div>
     );
 }
 
-export default StoryGiver;
+export default RoleGiver;

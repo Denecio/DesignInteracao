@@ -46,7 +46,7 @@ const WaitingRoom = () => {
                     <h2>Jogadores: {users.length}</h2>
                     <ul className="waitingroom_players">
                         {users.map((user) => (
-                            <PlayerCard key={user} player={user} />
+                            <PlayerCard key={user} player={user.username} />
                         ))}
                     </ul>
                 </div>

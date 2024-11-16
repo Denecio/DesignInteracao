@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
     if (rooms[roomID].users.includes(username)) 
       return callback({ success: false, message: 'Username already taken' })
     
-    rooms[roomID].users.push(username)
+    rooms[roomID].users.push({ username: username, role: 'Artist'})
     socket.join(roomID)
 
     // Update user list for the room
@@ -53,6 +53,12 @@ io.on('connection', (socket) => {
     let stories = require('./stories.json')
     let story = stories[Math.floor(Math.random() * stories.length)]
     rooms[roomID].story = story
+
+    let index = Math.floor(Math.random() * rooms[roomID].users.length)
+    rooms[roomID].users[index].role = 'Stage Setter'
+
+    io.to(roomID).emit('game-started', story)
+    io.to(roomID).emit('room-users', rooms[roomID])
     callback({ success: true })
   })
 
@@ -61,6 +67,13 @@ io.on('connection', (socket) => {
       return callback({ success: false, message: 'Room does not exist' })
     
     callback({ success: true, story: rooms[roomID].story })
+  })
+
+  socket.on('get-role', (roomID, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    callback({ success: true, role: rooms[roomID].users})
   })
 
   // Handle client disconnection
