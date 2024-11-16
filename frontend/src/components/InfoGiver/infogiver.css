@@ -1,8 +1,11 @@
 .infogiver_page{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     gap: 1rem;
+    height: 100vh;
+
 }
 
 .infogiver_container {
@@ -30,11 +33,6 @@
 .infogiver_text {
     padding: 5%;
     margin-bottom: 10px;
-}
-
-
-.check_button img {
-    width: 32px;
 }
 
 
