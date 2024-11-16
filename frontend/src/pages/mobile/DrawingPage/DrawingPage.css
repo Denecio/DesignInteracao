@@ -1,0 +1,53 @@
+
+@media only screen and (max-width: 768px) {
+    .enterroom_container {
+          background-color: #f2f2f2;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 25px;
+          justify-content: center;
+          transform: rotate(270deg);
+      }
+      
+  
+      .container {
+          height:100px;
+          width: 70%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 20px;
+          border: 1px solid;
+          
+        }
+  
+        .input{
+          width:70%;
+          border-radius: 5px;
+          border: 0.6px solid;
+          background-color: #e2e2e2;
+          padding: 5%;
+        }
+  
+  
+         img{
+          width: 32px; 
+         }
+  
+  
+         .btn-enter{
+          width:20%;
+          align-items: center;
+          border-radius: 10px;
+          border: none;
+          background-color: #e2e2e2;
+      }
+
+
+  
+    }
+  
+    
