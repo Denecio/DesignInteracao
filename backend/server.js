@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
 
   socket.on('join-room', (roomID, username, callback) => {
     if (!rooms[roomID]) 
-      rooms[roomID] = { users: [] , story: {} }
+      rooms[roomID] = { users: [] , story: {}, arrangedFrames: []}
     
     if (rooms[roomID].users.includes(username)) 
       return callback({ success: false, message: 'Username already taken' })
@@ -96,6 +96,23 @@ io.on('connection', (socket) => {
     io.to(roomID).emit('drawing', imageData)
 
     callback({ success: true })
+  })
+
+  socket.on('arrange-frames', (roomID, frames, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    rooms[roomID].arrangedFrames = frames
+    io.to(roomID).emit('arranged-frames', frames)
+
+    callback({ success: true })
+  })
+
+  socket.on('get-arranged-frames', (roomID, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    callback({ success: true, frames: rooms[roomID].arrangedFrames })
   })
 
   // Handle client disconnection
