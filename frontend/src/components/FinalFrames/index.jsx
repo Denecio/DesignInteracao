@@ -1,10 +1,10 @@
 import "./FinalFrames.css"
 
-const FinalFrames = ({ number }) => {
+const FinalFrames = ({ number, src }) => {
   return (
     <div className="final_frames">
         <p className="framestext">{number}º frame</p>
-        <img className="framesimage"src="https://via.placeholder.com/150" alt="Frame" />
+        <img className="framesimage" src={src} alt="Frame" />
     </div>
   )
 }

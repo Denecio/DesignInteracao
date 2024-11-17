@@ -46,7 +46,7 @@ const EnterRoom = () => {
                 <input type="text" className="input" placeholder="ID da Sala" value={roomID} onChange={(e) =>  setRoomID(e.target.value)}/>
                 <input type="text" className="input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)}/>
             </div>
-            <button className="btn-enter" onClick={handleEnterRoom}> <img src={check} alt="Confirm"/> </button>
+            <button className="check_button" onClick={handleEnterRoom}> <img src={check} alt="Confirm"/> </button>
         </div>
     )
 }
