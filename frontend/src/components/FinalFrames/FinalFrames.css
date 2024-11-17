@@ -1,6 +1,12 @@
 .final_frames{
     position: relative;
     width: 80%;
+    cursor: grab;
+    transition: opacity 0.2s;
+}
+  
+.final_frames:active {
+    cursor: grabbing;
 }
 
 .framesimage{
