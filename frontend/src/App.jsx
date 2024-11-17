@@ -8,6 +8,8 @@ import WaitingRoom from './pages/desktop/WaitingRoom';
 import Loading from './pages/mobile/Loading';
 import StoryGiver from './pages/mobile/StoryGiver';
 import RoleGiver from './pages/mobile/RoleGiver';
+import Final from './pages/desktop/Final';
+
 
 function App() {
   const isMobile = window.innerWidth < 768;
@@ -20,6 +22,7 @@ function App() {
         <Route path="/role/:id" element={isMobile ? <RoleGiver/> : <Loading text={"Agora que cá estão todos, é hora de olhares para o teu telemóvel"}/>} />
         <Route path="/drawing/:id" element={<DrawingPage />} />
         <Route path="/arrange-frames/:id" element={<ArrangeFrames />} />
+        <Route path="/final/:id" element={isMobile ? <Loading text={"Olha para o ecrã para principal para veres o resultado final"}/> : <Final />} />
       </Routes>
     </Router>
   )
