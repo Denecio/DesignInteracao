@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import check from "../../../assets/icons/check.png"
+import buttonsound from '../../../assets/sounds/button.mp3'; 
 
 const socket = io('http://localhost:8000');
 
@@ -25,6 +26,12 @@ const EnterRoom = () => {
             alert('Please enter a username');
             return;
         }
+
+          let ButtonSound = new Audio(buttonsound);
+          ButtonSound.play().catch(error => {
+              console.error("Error playing button sound:", error);
+          });
+  
 
         //set username to local storage
         localStorage.setItem('username', username);

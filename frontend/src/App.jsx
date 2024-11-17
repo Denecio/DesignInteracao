@@ -1,6 +1,7 @@
 import './App.css'
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from 'react';
 import Drawing from './components/Drawing';
 import EnterRoom from './pages/mobile/EnterRoom';
 import DrawingPage from './pages/mobile/DrawingPage';
@@ -9,9 +10,27 @@ import WaitingRoom from './pages/desktop/WaitingRoom';
 import Loading from './pages/mobile/Loading';
 import StoryGiver from './pages/mobile/StoryGiver';
 import RoleGiver from './pages/mobile/RoleGiver';
+import backgroundMusic from './assets/sounds/background.mp3'; 
+
 
 function App() {
   const isMobile = window.innerWidth < 768;
+
+  useEffect(() => {
+    let BackgroundMusic = new Audio(backgroundMusic);
+    BackgroundMusic.volume = 0.05; 
+    BackgroundMusic.loop = true; 
+    BackgroundMusic.play().catch(error => {
+      console.error("Error playing background music:", error);
+    });
+
+   
+    return () => {
+      BackgroundMusic.pause();
+      BackgroundMusic.currentTime = 0;
+    };
+  }, []);
+
   return (
     <Router>
       <Routes>

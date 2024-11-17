@@ -1,10 +1,20 @@
 import "./infogiver.css"
 import check from "../../assets/icons/check.png"
+import buttonsound from '../../assets/sounds/button.mp3';
 
 
 const InfoGiver = ({ text, role, url }) => {
   const handleClick = () => {
-    window.location.href = url
+    let ButtonSound = new Audio(buttonsound);
+    ButtonSound.play().catch(error => {
+      console.error("Error playing button sound:", error);
+    });
+
+     ButtonSound.addEventListener('ended', () => {
+      window.location.href = url;
+    });
+
+    
   }
 
   return (
