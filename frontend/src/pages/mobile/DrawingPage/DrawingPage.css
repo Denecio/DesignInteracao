@@ -61,11 +61,28 @@
   }
 
   .btn-enter {
-    width: 20%;
+    padding: 5px 20px;
     align-items: center;
     border-radius: 10px;
     border: none;
     background-color: #e2e2e2;
+  }
+  .confirmPopUp{
+    margin:auto;
+    background-color: #ffffff;
+    position:absolute;
+    display: flex;
+    flex-direction: column;
+    gap:3rem;
+    padding: 5% 10%;
+    border-radius: 20px;
+  }
+  .confirmBtns{
+   display: flex;
+   margin:auto;
+   border-radius: 10px;
+   border: none;
+   gap: 50px;
   }
 }
 
