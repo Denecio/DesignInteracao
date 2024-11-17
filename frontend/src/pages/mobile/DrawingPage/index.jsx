@@ -13,29 +13,35 @@ const socket = io.connect('http://localhost:8000');
 
 const DrawingPage = () => {
     const { id: roomID } = useParams();
-    const [image, setImage] = useState(null);
     const [text, setText] = useState("")
     const canvasRef = useRef(null);
+    const username = localStorage.getItem("username");
 
     useEffect(() => {
-        socket.emit('get-story', roomID, (data) => {
-            if (!data.success) 
-                return setText(data.message)
-            setText(data.story.text)
-        })
+        socket.emit("get-users", roomID, (response) => {
+            if (response.success) {
+                let user = response.users.find(user => user.username === username);
+                setText(user.story);
+            } else {
+                alert(response.message || "Failed to get story");
+            }
+        });
     })
 
 
-    const handleEnter = () => {
-        
+    const handleEnter = () => { 
         if (canvasRef.current) {
-            const imageData = canvasRef.current.getCanvasImage(); // Call the exposed method
-            console.log(imageData); // Base64 string of the canvas image
+            const imageData = canvasRef.current.getCanvasImage();
+            socket.emit('drawing', roomID, username, imageData, (response) => {
+                if (response.success) {
+                    window.location.href = `/arrange-frames/${roomID}`;
+                } else {
+                    console.error(response.message || 'Failed to send drawing');
+                }
+            });
         } else {
             console.error('Canvas ref is not defined');
         }
-
-        socket.emit('drawing', image)
     }
 
     
@@ -51,7 +57,7 @@ const DrawingPage = () => {
                     <p >{text ? text : "aosidaoidnaosnd"}</p>
                     <Canvas ref={canvasRef}/>
                 </div>
-                <button className="btn-enter" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
+                <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
             </div>
         </div>
     )

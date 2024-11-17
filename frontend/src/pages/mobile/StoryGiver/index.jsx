@@ -26,7 +26,7 @@ const StoryGiver = () => {
 
     return (
         <div className="storygiver_page">
-            <InfoGiver text="Era uma vez..." role={story?.title} url={`/role/${roomID}`}/>
+            <InfoGiver text="Era uma vez..." role={story} url={`/role/${roomID}`}/>
         </div>
     );
 }

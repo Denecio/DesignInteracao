@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
     if (rooms[roomID].users.includes(username)) 
       return callback({ success: false, message: 'Username already taken' })
     
-    rooms[roomID].users.push({ username: username, role: 'Artist'})
+    rooms[roomID].users.push({ username: username, role: 'Artist', story: '', img:''})
     socket.join(roomID)
 
     // Update user list for the room
@@ -52,10 +52,18 @@ io.on('connection', (socket) => {
     
     let stories = require('./stories.json')
     let story = stories[Math.floor(Math.random() * stories.length)]
-    rooms[roomID].story = story
+    rooms[roomID].story = story.title
 
     let index = Math.floor(Math.random() * rooms[roomID].users.length)
-    rooms[roomID].users[index].role = 'Stage Setter'
+    rooms[roomID].users[1].role = 'Stage Setter'
+
+    let artists = rooms[roomID].users.filter(user => user.role === 'Artist')
+    let storyParts = story.story
+    let storyIndex = 0
+    for (let i = 0; i < artists.length; i++) {
+      artists[i].story = storyParts[storyIndex]
+      storyIndex = (storyIndex + 1) % storyParts.length
+    }
 
     io.to(roomID).emit('game-started', story)
     io.to(roomID).emit('room-users', rooms[roomID])
@@ -69,11 +77,25 @@ io.on('connection', (socket) => {
     callback({ success: true, story: rooms[roomID].story })
   })
 
-  socket.on('get-role', (roomID, callback) => {
+  socket.on('get-users', (roomID, callback) => {
     if (!rooms[roomID]) 
       return callback({ success: false, message: 'Room does not exist' })
     
-    callback({ success: true, role: rooms[roomID].users})
+    callback({ success: true, users: rooms[roomID].users})
+  })
+
+  socket.on('drawing', (roomID, username, imageData, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    let index = rooms[roomID].users.findIndex(user => user.username === username)
+    if (index === -1) 
+      return callback({ success: false, message: 'User not found' })
+    
+    rooms[roomID].users[index].img = imageData
+    io.to(roomID).emit('drawing', imageData)
+
+    callback({ success: true })
   })
 
   // Handle client disconnection

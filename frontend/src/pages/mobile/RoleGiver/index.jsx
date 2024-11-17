@@ -8,14 +8,16 @@ const socket = io("http://localhost:8000");
 const RoleGiver = () => {
     const { id: roomID } = useParams();
     const [role, setRole] = useState(null);
+    const [url, setUrl] = useState(null);
 
     useEffect(() => {
         // Emit a "get-story" event to the server with the room ID
-        socket.emit("get-role", roomID, (response) => {
+        socket.emit("get-users", roomID, (response) => {
             if (response.success) {
                 let username = localStorage.getItem("username");
-                let role = response.role.find(user => user.username === username);
-                setRole(role.role);
+                let user = response.users.find(user => user.username === username);
+                setRole(user.role);
+                setUrl(user.role === "Artist" ? `/drawing/${roomID}` : `/room/${roomID}`);
             } else {
                 alert(response.message || "Failed to get story");
             }
@@ -28,7 +30,7 @@ const RoleGiver = () => {
 
     return (
         <div className="storygiver_page">
-            <InfoGiver text="Nesta ronda és" role={role} url={`/`}/>
+            <InfoGiver text="Nesta ronda és" role={role} url={url}/>
         </div>
     );
 }

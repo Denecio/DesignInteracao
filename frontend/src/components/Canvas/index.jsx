@@ -28,19 +28,9 @@ const Canvas = forwardRef((props, ref) => {
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
-    socket.on('drawing', (data) => {
-      const { x0, y0, x1, y1, color } = data;
-      drawLine(ctx, x0, y0, x1, y1, color, false);
-    });
-
-    return () => {
-      socket.off('drawing');
-      window.removeEventListener('resize', resizeCanvas);
-    };
   }, []);
 
-  const drawLine = (ctx, x0, y0, x1, y1, color, emit) => {
+  const drawLine = (ctx, x0, y0, x1, y1, color) => {
     ctx.beginPath();
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1, y1);
@@ -48,10 +38,6 @@ const Canvas = forwardRef((props, ref) => {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
-
-    if (!emit) return;
-
-    socket.emit('drawing', { x0, y0, x1, y1, color });
   };
 
   const handleMouseDown = (e) => {
@@ -68,7 +54,7 @@ const Canvas = forwardRef((props, ref) => {
     const ctx = canvasRef.current.getContext('2d');
     const color = 'black';
 
-    drawLine(ctx, canvasRef.current.lastX, canvasRef.current.lastY, offsetX, offsetY, color, true);
+    drawLine(ctx, canvasRef.current.lastX, canvasRef.current.lastY, offsetX, offsetY, color);
     canvasRef.current.lastX = offsetX;
     canvasRef.current.lastY = offsetY;
   };
@@ -93,7 +79,7 @@ const Canvas = forwardRef((props, ref) => {
     const ctx = canvasRef.current.getContext('2d');
     const color = 'black';
 
-    drawLine(ctx, canvasRef.current.lastX, canvasRef.current.lastY, x, y, color, true);
+    drawLine(ctx, canvasRef.current.lastX, canvasRef.current.lastY, x, y, color);
     canvasRef.current.lastX = x;
     canvasRef.current.lastY = y;
   };
