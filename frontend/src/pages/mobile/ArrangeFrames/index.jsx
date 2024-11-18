@@ -12,8 +12,8 @@ import FinalFrames from "../../../components/FinalFrames"
 const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
     const [frames, setFrames] = useState([]);
+    const [role, setRole] = useState("");
     const navigate = useNavigate();
-
     useEffect(() => {
 
         socket.emit('get-users', roomID, (response) => {
@@ -23,14 +23,22 @@ const ArrangeFrames = ({socket}) => {
                 .map(user => user.img);
 
                 setFrames(artistFrames);
+                setRole(response.users.filter(user => user.username === localStorage.getItem('username'))[0].role);
             } else {
                 alert(response.message || 'Failed to get frames');
             }
         });
 
+        const handleFrames = (data) => {
+            //console.log("Frames arranged", data);
+            navigate(`/final/${roomID}`);
+        }
+
+        socket.on("arranged-frames", handleFrames);
+
         return () => {
-            socket.disconnect();
-        };
+            socket.off("arranged-frames", handleFrames);
+        }
     }, [roomID])
 
     const moveFrame = useCallback((dragIndex, hoverIndex) => {
@@ -45,9 +53,7 @@ const ArrangeFrames = ({socket}) => {
     const handleCheck = () => {
         socket.emit("arrange-frames", roomID, frames, (response) => {
             if (response.success) {
-                console.log("Frames arranged");
-                navigate(`/final/${roomID}`);
-
+                //console.log("Frames arranged");
             } else {
                 alert(response.message || "Failed to arrange frames");
             }
@@ -59,7 +65,9 @@ const ArrangeFrames = ({socket}) => {
     }
 
     return (
+        
         <DndProvider backend={HTML5Backend}>
+            {role === "Artist" ? <h1>Espera pela tua vez</h1> : 
             <div className="arrangeframes_page">
                 <div className="arrangeframes_container">
                     <p className="arrangetext">Arrasta os frames para criar a história!</p>
@@ -75,7 +83,7 @@ const ArrangeFrames = ({socket}) => {
                     </div>
                 </div>
                 <button className="check_button" onClick={handleCheck}> <img src={check} alt="Confirm" /> </button>
-            </div>
+            </div>}
         </DndProvider>
     )
 }

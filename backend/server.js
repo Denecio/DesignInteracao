@@ -125,7 +125,8 @@ io.on('connection', (socket) => {
   socket.on('get-arranged-frames', (roomID, callback) => {
     if (!rooms[roomID]) 
       return callback({ success: false, message: 'Room does not exist' })
-    
+
+    console.log(`Sending frames for room ${roomID}:`, rooms[roomID].arrangedFrames);
     callback({ success: true, frames: rooms[roomID].arrangedFrames })
   })
 

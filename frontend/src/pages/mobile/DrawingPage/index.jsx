@@ -29,7 +29,7 @@ const DrawingPage = ({socket}) => {
         });
 
         const handleAllDrawings = (data) => {
-            console.log("Received 'all-drawings':", data);
+            //console.log("Received 'all-drawings':", data);
             navigate(`/arrange-frames/${roomID}`);
         }
 
@@ -45,11 +45,11 @@ const DrawingPage = ({socket}) => {
             const imageData = canvasRef.current.getCanvasImage();
             socket.emit('drawing', roomID, username, imageData, (response) => {
                 if (response.success) {
-                    console.log("Drawing sent successfully");
+                    //console.log("Drawing sent successfully");
                 }
             });
         } else {
-            console.error('Canvas ref is not defined');
+            //console.error('Canvas ref is not defined');
         }
     }
 
