@@ -1,13 +1,24 @@
 import "./infogiver.css"
 import check from "../../assets/icons/check.png"
 import { useNavigate } from 'react-router-dom';
+import buttonsound from '../../assets/sounds/button.mp3';
 
 
 const InfoGiver = ({ text, role, url }) => {
   const navigate = useNavigate();
   
   const handleClick = () => {
-    navigate(url)
+    
+    let ButtonSound = new Audio(buttonsound);
+    ButtonSound.play().catch(error => {
+      console.error("Error playing button sound:", error);
+    });
+
+     ButtonSound.addEventListener('ended', () => {
+      navigate(url)
+    });
+
+    
   }
 
   return (

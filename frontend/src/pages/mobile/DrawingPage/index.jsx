@@ -6,6 +6,7 @@ import check from "../../../assets/icons/check.png"
 import brush from "../../../assets/icons/brush.png"
 import eraser from "../../../assets/icons/eraser.png"
 import trash from "../../../assets/icons/trash.png"
+import buttonsound from '../../../assets/sounds/button.mp3';
 
 import Canvas from "../../../components/Canvas"
 
@@ -41,6 +42,14 @@ const DrawingPage = ({socket}) => {
     }, [roomID, socket]);
 
     const handleEnter = () => { 
+        let ButtonSound = new Audio(buttonsound);
+        ButtonSound.play().catch(error => {
+            console.error("Error playing button sound:", error);
+        });
+
+        ButtonSound.addEventListener('ended', () => {
+            window.location.href = url;
+        });
         if (canvasRef.current) {
             const imageData = canvasRef.current.getCanvasImage();
             socket.emit('drawing', roomID, username, imageData, (response) => {

@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import PlayerCard from "../../../components/PlayerCard";
 import check from "../../../assets/icons/check.svg";
 import { useNavigate } from 'react-router-dom';
+import playerlogin from '../../../assets/sounds/playerlogin.mp3';
+import buttonsound from '../../../assets/sounds/button.mp3';
 
 const WaitingRoom = ({socket}) => {
     const { id: roomID } = useParams();
@@ -24,6 +26,10 @@ const WaitingRoom = ({socket}) => {
         const handleRoomUsers = (data) => {
             //console.log("Received 'room-users':", data);
             setUsers(data.users);
+            let loginSound = new Audio(playerlogin);
+            loginSound.play().catch(error => {
+                console.error("Error playing login sound:", error);
+            });
         };
     
         socket.on("room-users", handleRoomUsers);
@@ -44,6 +50,13 @@ const WaitingRoom = ({socket}) => {
     }, [roomID, socket]);
     
     const handleCheck = () => {
+
+        let ButtonSound = new Audio(buttonsound);
+        ButtonSound.play().catch(error => {
+            console.error("Error playing button sound:", error);
+        });
+
+        console.log("Check");
         socket.emit("start-game", roomID, (response) => {
             if (!response.success) {
                 alert(response.message || "Failed to start game");
@@ -68,7 +81,7 @@ const WaitingRoom = ({socket}) => {
             <div className="waintingroom_end">
                 <h3>Estão todos?</h3>
                 <div></div>
-                <button className="check_button" onClick={ handleCheck }> <img src={check} alt="Confirm" /> </button>
+                <button className="check_button" onClick={handleCheck}> <img src={check} alt="Confirm" /> </button>
             </div>
         </div>
     );

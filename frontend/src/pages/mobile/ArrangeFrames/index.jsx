@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 import check from "../../../assets/icons/check.png"
 import FinalFrames from "../../../components/FinalFrames"
+import buttonsound from '../../../assets/sounds/button.mp3';
+
 
 const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
@@ -51,6 +53,15 @@ const ArrangeFrames = ({socket}) => {
     }, []);
     
     const handleCheck = () => {
+        let ButtonSound = new Audio(buttonsound);
+        ButtonSound.play().catch(error => {
+            console.error("Error playing button sound:", error);
+        });
+
+        ButtonSound.addEventListener('ended', () => {
+            window.location.href = url;
+        });
+
         socket.emit("arrange-frames", roomID, frames, (response) => {
             if (response.success) {
                 //console.log("Frames arranged");

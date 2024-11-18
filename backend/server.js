@@ -73,7 +73,6 @@ io.on('connection', (socket) => {
       storyIndex = (storyIndex + 1) % storyParts.length
     }
 
-    console.log(`Emitting 'game-started' to room ${roomID}`);
     io.to(roomID).emit('game-started', { message: "Game started!" });
 
     callback({ success: true })
@@ -105,7 +104,6 @@ io.on('connection', (socket) => {
     //if all the artists have submitted their drawings
     //not all the users are artists
     if (rooms[roomID].users.filter(user => user.role === 'Artist').every(user => user.img !== '')) {
-      console.log(`Emitting 'all-drawings' to room ${roomID}`);
       io.to(roomID).emit('all-drawings', { message: 'All drawings submitted' })
     }
 
@@ -126,7 +124,6 @@ io.on('connection', (socket) => {
     if (!rooms[roomID]) 
       return callback({ success: false, message: 'Room does not exist' })
 
-    console.log(`Sending frames for room ${roomID}:`, rooms[roomID].arrangedFrames);
     callback({ success: true, frames: rooms[roomID].arrangedFrames })
   })
 
