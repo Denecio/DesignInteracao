@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useNavigate } from 'react-router-dom';
 
 import check from "../../../assets/icons/check.png"
 import FinalFrames from "../../../components/FinalFrames"
@@ -11,7 +12,7 @@ import FinalFrames from "../../../components/FinalFrames"
 const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
     const [frames, setFrames] = useState([]);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -45,7 +46,7 @@ const ArrangeFrames = ({socket}) => {
         socket.emit("arrange-frames", roomID, frames, (response) => {
             if (response.success) {
                 console.log("Frames arranged");
-                window.location.href = `/final/${roomID}`;
+                navigate(`/final/${roomID}`);
 
             } else {
                 alert(response.message || "Failed to arrange frames");

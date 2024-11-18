@@ -1,10 +1,13 @@
 import "./infogiver.css"
 import check from "../../assets/icons/check.png"
+import { useNavigate } from 'react-router-dom';
 
 
 const InfoGiver = ({ text, role, url }) => {
+  const navigate = useNavigate();
+  
   const handleClick = () => {
-    window.location.href = url
+    navigate(url)
   }
 
   return (

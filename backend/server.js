@@ -102,7 +102,12 @@ io.on('connection', (socket) => {
       return callback({ success: false, message: 'User not found' })
     
     rooms[roomID].users[index].img = imageData
-    io.to(roomID).emit('drawing', imageData)
+    //if all the artists have submitted their drawings
+    //not all the users are artists
+    if (rooms[roomID].users.filter(user => user.role === 'Artist').every(user => user.img !== '')) {
+      console.log(`Emitting 'all-drawings' to room ${roomID}`);
+      io.to(roomID).emit('all-drawings', { message: 'All drawings submitted' })
+    }
 
     callback({ success: true })
   })

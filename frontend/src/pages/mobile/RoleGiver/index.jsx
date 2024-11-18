@@ -14,7 +14,7 @@ const RoleGiver = ({socket}) => {
                 let username = localStorage.getItem("username");
                 let user = response.users.find(user => user.username === username);
                 setRole(user.role);
-                setUrl(user.role === "Artist" ? `/drawing/${roomID}` : `/room/${roomID}`);
+                setUrl(`/drawing/${roomID}`);
             } else {
                 alert(response.message || "Failed to get story");
             }

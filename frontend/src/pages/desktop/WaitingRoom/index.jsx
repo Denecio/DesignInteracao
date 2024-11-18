@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PlayerCard from "../../../components/PlayerCard";
 import check from "../../../assets/icons/check.svg";
+import { useNavigate } from 'react-router-dom';
 
 const WaitingRoom = ({socket}) => {
     const { id: roomID } = useParams();
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Emit a "load-room" event to the server with the room ID
@@ -30,7 +32,7 @@ const WaitingRoom = ({socket}) => {
         const handleGameStarted = (data) => {
             console.log("Received 'game-started':", data);
             // Handle game start (e.g., navigate to the next page)
-            window.location.href = `/story/${roomID}`;
+            navigate(`/story/${roomID}`);
         };
 
         socket.on("game-started", handleGameStarted);

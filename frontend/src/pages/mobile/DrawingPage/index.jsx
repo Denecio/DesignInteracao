@@ -1,5 +1,6 @@
 import "./DrawingPage.css"
 import { useEffect, useRef, useState } from "react"
+import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom"
 import check from "../../../assets/icons/check.png"
 import brush from "../../../assets/icons/brush.png"
@@ -11,29 +12,40 @@ import Canvas from "../../../components/Canvas"
 const DrawingPage = ({socket}) => {
     const { id: roomID } = useParams();
     const [text, setText] = useState("")
+    const [role, setRole] = useState("")
     const canvasRef = useRef(null);
     const username = localStorage.getItem("username");
+    const navigate = useNavigate();
 
     useEffect(() => {
         socket.emit("get-users", roomID, (response) => {
             if (response.success) {
                 let user = response.users.find(user => user.username === username);
                 setText(user.story);
+                setRole(user.role);
             } else {
                 alert(response.message || "Failed to get story");
             }
         });
-    })
 
+        const handleAllDrawings = (data) => {
+            console.log("Received 'all-drawings':", data);
+            navigate(`/arrange-frames/${roomID}`);
+        }
+
+        socket.on("all-drawings", handleAllDrawings);
+
+        return () => {
+            socket.off("all-drawings", handleAllDrawings);
+        }
+    }, [roomID, socket]);
 
     const handleEnter = () => { 
         if (canvasRef.current) {
             const imageData = canvasRef.current.getCanvasImage();
             socket.emit('drawing', roomID, username, imageData, (response) => {
                 if (response.success) {
-                    window.location.href = `/arrange-frames/${roomID}`;
-                } else {
-                    console.error(response.message || 'Failed to send drawing');
+                    console.log("Drawing sent successfully");
                 }
             });
         } else {
@@ -44,6 +56,7 @@ const DrawingPage = ({socket}) => {
     
     return (
         <div className="drawingpage">
+            {role === "Artist" ? 
             <div className="drawingpage_container">
                 <div className="buttons">
                     <button className="btn-brush"> <img src={brush} alt="Confirm" /> </button>
@@ -55,7 +68,7 @@ const DrawingPage = ({socket}) => {
                     <Canvas ref={canvasRef}/>
                 </div>
                 <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
-            </div>
+            </div> : <h1>Espera pela tua vez</h1>}
         </div>
     )
 }
