@@ -2,20 +2,18 @@ import "./ArrangeFrames.css"
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
-import { io } from "socket.io-client"
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import check from "../../../assets/icons/check.png"
 import FinalFrames from "../../../components/FinalFrames"
 
-const ArrangeFrames = () => {
+const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
     const [frames, setFrames] = useState([]);
 
 
     useEffect(() => {
-        const socket = io.connect('http://localhost:8000');
 
         socket.emit('get-users', roomID, (response) => {
             if (response.success) {
@@ -44,7 +42,6 @@ const ArrangeFrames = () => {
     }, []);
     
     const handleCheck = () => {
-        const socket = io.connect('http://localhost:8000');
         socket.emit("arrange-frames", roomID, frames, (response) => {
             if (response.success) {
                 console.log("Frames arranged");

@@ -1,5 +1,4 @@
 import "./DrawingPage.css"
-import { io } from "socket.io-client"
 import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import check from "../../../assets/icons/check.png"
@@ -9,9 +8,7 @@ import trash from "../../../assets/icons/trash.png"
 
 import Canvas from "../../../components/Canvas"
 
-const socket = io.connect('http://localhost:8000');
-
-const DrawingPage = () => {
+const DrawingPage = ({socket}) => {
     const { id: roomID } = useParams();
     const [text, setText] = useState("")
     const canvasRef = useRef(null);

@@ -1,13 +1,10 @@
 import "./WaitingRoom.css";
 import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import PlayerCard from "../../../components/PlayerCard";
 import check from "../../../assets/icons/check.svg";
 
-const socket = io("http://localhost:8000");
-
-const WaitingRoom = () => {
+const WaitingRoom = ({socket}) => {
     const { id: roomID } = useParams();
     const [users, setUsers] = useState([]);
 
@@ -21,20 +18,35 @@ const WaitingRoom = () => {
                 alert(response.message || "Failed to load room");
             }
         });
-
-        return () => {
-            socket.off("room-users");
+    
+        // Listen for "room-users" events from the server
+        const handleRoomUsers = (data) => {
+            console.log("Received 'room-users':", data);
+            setUsers(data.users);
         };
-    }, [roomID]);
+    
+        socket.on("room-users", handleRoomUsers);
 
+        const handleGameStarted = (data) => {
+            console.log("Received 'game-started':", data);
+            // Handle game start (e.g., navigate to the next page)
+            window.location.href = `/story/${roomID}`;
+        };
+
+        socket.on("game-started", handleGameStarted);
+
+        // Clean up the listeners when the component unmounts
+        return () => {
+            socket.off("room-users", handleRoomUsers);
+            socket.off("game-started", handleGameStarted);
+        };
+    }, [roomID, socket]);
+    
     const handleCheck = () => {
-        console.log("Check");
         socket.emit("start-game", roomID, (response) => {
             if (!response.success) {
                 alert(response.message || "Failed to start game");
-            } else
-                window.location.href = `/story/${roomID}`;
-            
+            }      
         })
     }
 

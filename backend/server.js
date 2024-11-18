@@ -24,20 +24,28 @@ io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`)
 
   socket.on('join-room', (roomID, username, callback) => {
-    if (!rooms[roomID]) 
-      rooms[roomID] = { users: [] , story: {}, arrangedFrames: []}
-    
-    if (rooms[roomID].users.includes(username)) 
-      return callback({ success: false, message: 'Username already taken' })
-    
-    rooms[roomID].users.push({ username: username, role: 'Artist', story: '', img:''})
-    socket.join(roomID)
+    if (!rooms[roomID]) {
+        rooms[roomID] = { users: [], story: {}, arrangedFrames: [] };
+    }
 
-    // Update user list for the room
-    io.to(roomID).emit('room-users', rooms[roomID])
+    // Check if the username is already taken
+    if (rooms[roomID].users.some(user => user.username === username)) {
+        return callback({ success: false, message: 'Username already taken' });
+    }
 
-    callback({ success: true })
+    // Join the room
+    socket.join(roomID);
+
+    // Add the user to the room's users list
+    rooms[roomID].users.push({ username: username, role: 'Artist', story: '', img: '' });
+
+    // Emit the updated list of users in the room
+    io.to(roomID).emit('room-users', { users: rooms[roomID].users });
+
+    // Send a success callback with the updated users list
+    callback({ success: true, users: rooms[roomID].users });
   });
+
 
   socket.on('load-room', (roomID, callback) => {
     if (!rooms[roomID]) 
@@ -55,7 +63,7 @@ io.on('connection', (socket) => {
     rooms[roomID].story = story.title
 
     let index = Math.floor(Math.random() * rooms[roomID].users.length)
-    rooms[roomID].users[1].role = 'Stage Setter'
+    rooms[roomID].users[0].role = 'Stage Setter'
 
     let artists = rooms[roomID].users.filter(user => user.role === 'Artist')
     let storyParts = story.story
@@ -65,8 +73,9 @@ io.on('connection', (socket) => {
       storyIndex = (storyIndex + 1) % storyParts.length
     }
 
-    io.to(roomID).emit('game-started', story)
-    io.to(roomID).emit('room-users', rooms[roomID])
+    console.log(`Emitting 'game-started' to room ${roomID}`);
+    io.to(roomID).emit('game-started', { message: "Game started!" });
+
     callback({ success: true })
   })
 

@@ -3,12 +3,11 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { io } from "socket.io-client"
 
-const Final = () => {
+const Final = ({socket}) => {
     const { id: roomID } = useParams();
     const [frames, setFrames] = useState([]);
 
     useEffect(() => {
-        const socket = io.connect('http://localhost:8000');
         socket.emit('get-arranged-frames', roomID, (response) => {
             if (response.success) {
                 setFrames(response.frames);
@@ -21,8 +20,6 @@ const Final = () => {
             socket.disconnect();
         };
     }, [roomID])
-
-    console.log(frames)
 
     return (
         <div className="finalpage">

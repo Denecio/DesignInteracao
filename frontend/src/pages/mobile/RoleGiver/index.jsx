@@ -1,11 +1,8 @@
 import InfoGiver from "../../../components/InfoGiver";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { io } from "socket.io-client";
 
-const socket = io("http://localhost:8000");
-
-const RoleGiver = () => {
+const RoleGiver = ({socket}) => {
     const { id: roomID } = useParams();
     const [role, setRole] = useState(null);
     const [url, setUrl] = useState(null);
