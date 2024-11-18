@@ -1,13 +1,10 @@
 import "./EnterRoom.css"
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
 import check from "../../../assets/icons/check.png"
 import buttonsound from '../../../assets/sounds/button.mp3'; 
 
-const socket = io('http://localhost:8000');
-
-const EnterRoom = () => {
+const EnterRoom = ({socket}) => {
     const [roomID, setRoomID] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
@@ -53,7 +50,7 @@ const EnterRoom = () => {
                 <input type="text" className="input" placeholder="ID da Sala" value={roomID} onChange={(e) =>  setRoomID(e.target.value)}/>
                 <input type="text" className="input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)}/>
             </div>
-            <button className="btn-enter" onClick={handleEnterRoom}> <img src={check} alt="Confirm"/> </button>
+            <button className="check_button" onClick={handleEnterRoom}> <img src={check} alt="Confirm"/> </button>
         </div>
     )
 }

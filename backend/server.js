@@ -24,20 +24,28 @@ io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`)
 
   socket.on('join-room', (roomID, username, callback) => {
-    if (!rooms[roomID]) 
-      rooms[roomID] = { users: [] , story: {} }
-    
-    if (rooms[roomID].users.includes(username)) 
-      return callback({ success: false, message: 'Username already taken' })
-    
-    rooms[roomID].users.push({ username: username, role: 'Artist'})
-    socket.join(roomID)
+    if (!rooms[roomID]) {
+        rooms[roomID] = { users: [], story: {}, arrangedFrames: [] };
+    }
 
-    // Update user list for the room
-    io.to(roomID).emit('room-users', rooms[roomID])
+    // Check if the username is already taken
+    if (rooms[roomID].users.some(user => user.username === username)) {
+        return callback({ success: false, message: 'Username already taken' });
+    }
 
-    callback({ success: true })
+    // Join the room
+    socket.join(roomID);
+
+    // Add the user to the room's users list
+    rooms[roomID].users.push({ username: username, role: 'Artist', story: '', img: '' });
+
+    // Emit the updated list of users in the room
+    io.to(roomID).emit('room-users', { users: rooms[roomID].users });
+
+    // Send a success callback with the updated users list
+    callback({ success: true, users: rooms[roomID].users });
   });
+
 
   socket.on('load-room', (roomID, callback) => {
     if (!rooms[roomID]) 
@@ -52,13 +60,22 @@ io.on('connection', (socket) => {
     
     let stories = require('./stories.json')
     let story = stories[Math.floor(Math.random() * stories.length)]
-    rooms[roomID].story = story
+    rooms[roomID].story = story.title
 
     let index = Math.floor(Math.random() * rooms[roomID].users.length)
-    rooms[roomID].users[index].role = 'Stage Setter'
+    rooms[roomID].users[0].role = 'Stage Setter'
 
-    io.to(roomID).emit('game-started', story)
-    io.to(roomID).emit('room-users', rooms[roomID])
+    let artists = rooms[roomID].users.filter(user => user.role === 'Artist')
+    let storyParts = story.story
+    let storyIndex = 0
+    for (let i = 0; i < artists.length; i++) {
+      artists[i].story = storyParts[storyIndex]
+      storyIndex = (storyIndex + 1) % storyParts.length
+    }
+
+    console.log(`Emitting 'game-started' to room ${roomID}`);
+    io.to(roomID).emit('game-started', { message: "Game started!" });
+
     callback({ success: true })
   })
 
@@ -69,11 +86,48 @@ io.on('connection', (socket) => {
     callback({ success: true, story: rooms[roomID].story })
   })
 
-  socket.on('get-role', (roomID, callback) => {
+  socket.on('get-users', (roomID, callback) => {
     if (!rooms[roomID]) 
       return callback({ success: false, message: 'Room does not exist' })
     
-    callback({ success: true, role: rooms[roomID].users})
+    callback({ success: true, users: rooms[roomID].users})
+  })
+
+  socket.on('drawing', (roomID, username, imageData, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    let index = rooms[roomID].users.findIndex(user => user.username === username)
+    if (index === -1) 
+      return callback({ success: false, message: 'User not found' })
+    
+    rooms[roomID].users[index].img = imageData
+    //if all the artists have submitted their drawings
+    //not all the users are artists
+    if (rooms[roomID].users.filter(user => user.role === 'Artist').every(user => user.img !== '')) {
+      console.log(`Emitting 'all-drawings' to room ${roomID}`);
+      io.to(roomID).emit('all-drawings', { message: 'All drawings submitted' })
+    }
+
+    callback({ success: true })
+  })
+
+  socket.on('arrange-frames', (roomID, frames, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    rooms[roomID].arrangedFrames = frames
+    io.to(roomID).emit('arranged-frames', frames)
+
+    callback({ success: true })
+  })
+
+  socket.on('get-arranged-frames', (roomID, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+
+    console.log(`Sending frames for room ${roomID}:`, rooms[roomID].arrangedFrames);
+    callback({ success: true, frames: rooms[roomID].arrangedFrames })
   })
 
   // Handle client disconnection

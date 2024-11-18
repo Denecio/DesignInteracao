@@ -10,6 +10,9 @@ import WaitingRoom from './pages/desktop/WaitingRoom';
 import Loading from './pages/mobile/Loading';
 import StoryGiver from './pages/mobile/StoryGiver';
 import RoleGiver from './pages/mobile/RoleGiver';
+import Final from './pages/desktop/Final';
+
+import socket from './socket';
 import backgroundMusic from './assets/sounds/background.mp3'; 
 
 
@@ -34,13 +37,15 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/DrawingPage" element={<DrawingPage />} />
-        <Route path="/drawing/:id" element={<Drawing />} />
-        <Route path="/" element={<EnterRoom />} />
-        <Route path="/ArrangeFrames/:id" element={<ArrangeFrames />} />
-        <Route path="/room/:id" element={isMobile ? <Loading text={"Aguarda que todos os jogadores entrem na Sala"} /> : <WaitingRoom />} />
-        <Route path="/story/:id" element={isMobile ? <StoryGiver/> : <Loading text={"Agora que cá estão todos, é hora de olhares para o teu telemóvel"}/>} />
-        <Route path="/role/:id" element={isMobile ? <RoleGiver/> : <Loading text={"Agora que cá estão todos, é hora de olhares para o teu telemóvel"}/>} />
+        <Route path="/" element={<EnterRoom socket={socket}/>} />
+        <Route path="/room/:id" element={isMobile ? <Loading text="Aguarda que todos os jogadores entrem na Sala" page="story" url="game-started" socket={socket}/> : <WaitingRoom socket={socket}/>} />
+        {/*<Route path="/story/:id" element={isMobile ? <StoryGiver socket={socket}/> : <Loading text="Agora que cá estão todos, é hora de olhares para o teu telemóvel" socket={socket}/>} />*/}
+        <Route path="/story/:id" element={<StoryGiver socket={socket}/>} />
+        <Route path="/role/:id" element={<RoleGiver socket={socket}/>}/>
+        {/*<Route path="/role/:id" element={isMobile ? <RoleGiver socket={socket}/> : <Loading text="Agora que cá estão todos, é hora de olhares para o teu telemóvel" socket={socket}/>} />*/}
+        <Route path="/drawing/:id" element={<DrawingPage socket={socket}/>} />
+        <Route path="/arrange-frames/:id" element={<ArrangeFrames socket={socket}/>} />
+        <Route path="/final/:id" element={isMobile ? <Loading text="Olha para o ecrã para principal para veres o resultado final" socket={socket}/> : <Final socket={socket}/>} />
       </Routes>
     </Router>
   )
