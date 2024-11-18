@@ -1,12 +1,9 @@
 import "./EnterRoom.css"
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
 import check from "../../../assets/icons/check.png"
 
-const socket = io('http://localhost:8000');
-
-const EnterRoom = () => {
+const EnterRoom = ({socket}) => {
     const [roomID, setRoomID] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();

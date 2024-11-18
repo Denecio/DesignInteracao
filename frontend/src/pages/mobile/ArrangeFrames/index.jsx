@@ -2,20 +2,19 @@ import "./ArrangeFrames.css"
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
-import { io } from "socket.io-client"
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useNavigate } from 'react-router-dom';
 
 import check from "../../../assets/icons/check.png"
 import FinalFrames from "../../../components/FinalFrames"
 
-const ArrangeFrames = () => {
+const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
     const [frames, setFrames] = useState([]);
-
-
+    const [role, setRole] = useState("");
+    const navigate = useNavigate();
     useEffect(() => {
-        const socket = io.connect('http://localhost:8000');
 
         socket.emit('get-users', roomID, (response) => {
             if (response.success) {
@@ -24,14 +23,22 @@ const ArrangeFrames = () => {
                 .map(user => user.img);
 
                 setFrames(artistFrames);
+                setRole(response.users.filter(user => user.username === localStorage.getItem('username'))[0].role);
             } else {
                 alert(response.message || 'Failed to get frames');
             }
         });
 
+        const handleFrames = (data) => {
+            //console.log("Frames arranged", data);
+            navigate(`/final/${roomID}`);
+        }
+
+        socket.on("arranged-frames", handleFrames);
+
         return () => {
-            socket.disconnect();
-        };
+            socket.off("arranged-frames", handleFrames);
+        }
     }, [roomID])
 
     const moveFrame = useCallback((dragIndex, hoverIndex) => {
@@ -44,12 +51,9 @@ const ArrangeFrames = () => {
     }, []);
     
     const handleCheck = () => {
-        const socket = io.connect('http://localhost:8000');
         socket.emit("arrange-frames", roomID, frames, (response) => {
             if (response.success) {
-                console.log("Frames arranged");
-                window.location.href = `/final/${roomID}`;
-
+                //console.log("Frames arranged");
             } else {
                 alert(response.message || "Failed to arrange frames");
             }
@@ -61,7 +65,9 @@ const ArrangeFrames = () => {
     }
 
     return (
+        
         <DndProvider backend={HTML5Backend}>
+            {role === "Artist" ? <h1>Espera pela tua vez</h1> : 
             <div className="arrangeframes_page">
                 <div className="arrangeframes_container">
                     <p className="arrangetext">Arrasta os frames para criar a história!</p>
@@ -77,7 +83,7 @@ const ArrangeFrames = () => {
                     </div>
                 </div>
                 <button className="check_button" onClick={handleCheck}> <img src={check} alt="Confirm" /> </button>
-            </div>
+            </div>}
         </DndProvider>
     )
 }
