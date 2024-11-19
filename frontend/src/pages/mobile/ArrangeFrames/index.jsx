@@ -13,6 +13,8 @@ const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
     const [frames, setFrames] = useState([]);
     const [role, setRole] = useState("");
+    const [timeLeft, setTimeLeft] = useState(30); // Timer 30s
+    const [canMoveFrames, setCanMoveFrames] = useState(true); // Flag to indicate if frames can be moved
     const navigate = useNavigate();
     useEffect(() => {
 
@@ -41,11 +43,20 @@ const ArrangeFrames = ({socket}) => {
         }
     }, [roomID])
 
+    useEffect(() => {
+        if (timeLeft > 0) {
+            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+            return () => clearTimeout(timer);
+        } else {
+            setCanMoveFrames(false); 
+        }
+    }, [timeLeft]);
+
     const moveFrame = useCallback((dragIndex, hoverIndex) => {
         setFrames((prevFrames) => {
             const updatedFrames = [...prevFrames];
-            const [draggedFrame] = updatedFrames.splice(dragIndex, 1); // Remove dragged frame
-            updatedFrames.splice(hoverIndex, 0, draggedFrame); // Insert at new position
+            const [draggedFrame] = updatedFrames.splice(dragIndex, 1); 
+            updatedFrames.splice(hoverIndex, 0, draggedFrame); 
             return updatedFrames;
         });
     }, []);
@@ -71,13 +82,14 @@ const ArrangeFrames = ({socket}) => {
             <div className="arrangeframes_page">
                 <div className="arrangeframes_container">
                     <p className="arrangetext">Arrasta os frames para criar a história!</p>
+                    <p className="timer">Tempo Restante: {timeLeft} segundos</p>
                     <div className="arrangeframes_frames">
                         {frames.map((frame, index) => {
                             return <FinalFrames key={index}
                             index={index}
                             number={index + 1}
                             src={frame}
-                            moveFrame={moveFrame}
+                            moveFrame={canMoveFrames ? moveFrame : null}
                             />
                         })}
                     </div>
