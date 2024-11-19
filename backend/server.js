@@ -127,6 +127,16 @@ io.on('connection', (socket) => {
     callback({ success: true, frames: rooms[roomID].arrangedFrames })
   })
 
+  socket.on('end-game', (roomID, callback) => {
+    if (!rooms[roomID]) 
+      return callback({ success: false, message: 'Room does not exist' })
+    
+    rooms[roomID] = { users: [], story: {}, arrangedFrames: [] }
+    io.to(roomID).emit('game-ended', { message: 'Game ended' })
+
+    callback({ success: true })
+  })
+
   // Handle client disconnection
   socket.on('disconnect', () => {
     for(let roomID in rooms) {
