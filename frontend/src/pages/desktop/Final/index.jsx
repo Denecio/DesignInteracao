@@ -1,4 +1,5 @@
 import "./Final.css"
+import "../../../App.css"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import buttonsound from '../../../assets/sounds/button.mp3';

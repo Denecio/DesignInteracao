@@ -1,4 +1,5 @@
 import "./ArrangeFrames.css"
+import "../../../App.css"
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"

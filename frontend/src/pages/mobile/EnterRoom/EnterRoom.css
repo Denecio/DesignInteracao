@@ -1,6 +1,5 @@
 @media only screen and (max-width: 768px) {
   .enterroom_page {
-    background-color: #FFFFFF;
     height: 100vh;
     display: flex;
     flex-direction: column;
