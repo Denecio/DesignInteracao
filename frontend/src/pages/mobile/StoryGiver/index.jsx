@@ -1,3 +1,5 @@
+import "../../../App.css"
+
 import InfoGiver from "../../../components/InfoGiver";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";

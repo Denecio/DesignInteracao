@@ -1,0 +1,10 @@
+@media only screen and (max-width: 768px) {
+    .enterroom_page {
+      background: url('./assets/images/mobileBackground.webp') lightgray 50% / cover no-repeat;
+    }
+}
+
+body{
+    background: url('./assets/images/background.webp') lightgray 50% / cover no-repeat;
+}
+  

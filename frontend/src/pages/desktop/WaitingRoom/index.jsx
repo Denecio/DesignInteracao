@@ -1,4 +1,5 @@
 import "./WaitingRoom.css";
+import "../../../App.css"
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PlayerCard from "../../../components/PlayerCard";
