@@ -1,4 +1,5 @@
 import "./DrawingPage.css"
+import "../../../App.css"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom"
