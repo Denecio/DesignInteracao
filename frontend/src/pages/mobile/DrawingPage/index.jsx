@@ -11,10 +11,11 @@ import buttonsound from '../../../assets/sounds/button.mp3';
 
 import Canvas from "../../../components/Canvas"
 
-const DrawingPage = ({socket}) => {
+const DrawingPage = ({ socket }) => {
     const { id: roomID } = useParams();
     const [text, setText] = useState("")
     const [role, setRole] = useState("")
+    const [isDrawing, setIsDrawing] = useState(false);
     const canvasRef = useRef(null);
     const username = localStorage.getItem("username");
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ const DrawingPage = ({socket}) => {
         }
     }, [roomID, socket]);
 
-    const handleEnter = () => { 
+    const handleEnter = () => {
         let ButtonSound = new Audio(buttonsound);
         ButtonSound.play().catch(error => {
             console.error("Error playing button sound:", error);
@@ -63,22 +64,32 @@ const DrawingPage = ({socket}) => {
         }
     }
 
-    
+    const toggleDrawing = () => {
+        setIsDrawing(!isDrawing);
+    }
+
+    const clearCanvas = () => {
+        if (canvasRef.current) {
+            canvasRef.current.clearCanvas();
+        }
+    }
+
+
     return (
         <div className="drawingpage">
-            {role === "Artist" ? 
-            <div className="drawingpage_container">
-                <div className="buttons">
-                    <button className="btn-brush"> <img src={brush} alt="Confirm" /> </button>
-                    <button className="btn-eraser"> <img src={eraser} alt="Confirm" /> </button>
-                    <button className="btn-trash"> <img src={trash} alt="Confirm" /> </button>
-                </div>
-                <div className="drawing">
-                    <p >{text ? text : "aosidaoidnaosnd"}</p>
-                    <Canvas ref={canvasRef}/>
-                </div>
-                <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
-            </div> : <h1>Espera pela tua vez</h1>}
+            {role === "Artist" ?
+                <div className="drawingpage_container">
+                    <div className="buttons">
+                        <button className="btn-brush" onClick={toggleDrawing}> <img src={brush} alt="Confirm" /> </button>
+                        <button className="btn-eraser"> <img src={eraser} alt="Confirm" /> </button>
+                        <button className="btn-trash" nClick={clearCanvas}> <img src={trash} alt="Confirm" /> </button>
+                    </div>
+                    <div className="drawing">
+                        <p >{text ? text : "aosidaoidnaosnd"}</p>
+                        <Canvas ref={canvasRef} />
+                    </div>
+                    <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
+                </div> : <h1>Espera pela tua vez</h1>}
         </div>
     )
 }

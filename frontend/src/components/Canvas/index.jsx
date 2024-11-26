@@ -13,6 +13,11 @@ const Canvas = forwardRef((props, ref) => {
       const canvas = canvasRef.current;
       return canvas.toDataURL('image/png'); // Get canvas image as base64
     },
+    clearCanvas: () => {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // não sei se esta bem
+    }
   }));
 
   useEffect(() => {
