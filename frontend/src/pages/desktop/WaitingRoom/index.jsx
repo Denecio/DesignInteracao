@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import playerlogin from '../../../assets/sounds/playerlogin.mp3';
 import buttonsound from '../../../assets/sounds/button.mp3';
 
-const WaitingRoom = ({socket}) => {
+const WaitingRoom = ({ socket }) => {
     const { id: roomID } = useParams();
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const WaitingRoom = ({socket}) => {
                 alert(response.message || "Failed to load room");
             }
         });
-    
+
         // Listen for "room-users" events from the server
         const handleRoomUsers = (data) => {
             //console.log("Received 'room-users':", data);
@@ -32,7 +32,7 @@ const WaitingRoom = ({socket}) => {
                 console.error("Error playing login sound:", error);
             });
         };
-    
+
         socket.on("room-users", handleRoomUsers);
 
         const handleGameStarted = (data) => {
@@ -49,7 +49,7 @@ const WaitingRoom = ({socket}) => {
             socket.off("game-started", handleGameStarted);
         };
     }, [roomID, socket]);
-    
+
     const handleCheck = () => {
 
         let ButtonSound = new Audio(buttonsound);
@@ -61,7 +61,7 @@ const WaitingRoom = ({socket}) => {
         socket.emit("start-game", roomID, (response) => {
             if (!response.success) {
                 alert(response.message || "Failed to start game");
-            }      
+            }
         })
     }
 
@@ -77,7 +77,8 @@ const WaitingRoom = ({socket}) => {
                         ))}
                     </ul>
                 </div>
-                <div className="waitingroom_placeholder">?</div>
+                <div className="waitingroom_placeholder">Enquanto esperas
+                    desenha alguma coisa aqui!</div>
             </div>
             <div className="waintingroom_end">
                 <h3>Estão todos?</h3>

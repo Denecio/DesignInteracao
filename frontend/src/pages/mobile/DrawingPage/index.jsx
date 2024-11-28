@@ -89,7 +89,7 @@ const DrawingPage = ({ socket }) => {
                         <Canvas ref={canvasRef} />
                     </div>
                     <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
-                </div> : <h1>Espera pela tua vez</h1>}
+                </div> : <h1>Espera pela tua vez...</h1>}
         </div>
     )
 }

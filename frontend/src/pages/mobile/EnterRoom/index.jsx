@@ -3,9 +3,9 @@ import "../../../App.css"
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import check from "../../../assets/icons/check.png"
-import buttonsound from '../../../assets/sounds/button.mp3'; 
+import buttonsound from '../../../assets/sounds/button.mp3';
 
-const EnterRoom = ({socket}) => {
+const EnterRoom = ({ socket }) => {
     const [roomID, setRoomID] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
@@ -25,11 +25,11 @@ const EnterRoom = ({socket}) => {
             return;
         }
 
-          let ButtonSound = new Audio(buttonsound);
-          ButtonSound.play().catch(error => {
-              console.error("Error playing button sound:", error);
-          });
-  
+        let ButtonSound = new Audio(buttonsound);
+        ButtonSound.play().catch(error => {
+            console.error("Error playing button sound:", error);
+        });
+
 
         //set username to local storage
         localStorage.setItem('username', username);
@@ -45,15 +45,14 @@ const EnterRoom = ({socket}) => {
         });
     };
 
-    return(
+    return (
         <div className="enterroom_page">
             <div className="enterroom_container">
-                <div className="container">
-                    <input type="text" className="input" placeholder="ID da Sala" value={roomID} onChange={(e) =>  setRoomID(e.target.value)}/>
-                    <input type="text" className="input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)}/>
-                </div>
-                <button className="check_button" onClick={handleEnterRoom}> <img src={check} alt="Confirm"/> </button>
+                <input type="text" className="container_input" placeholder="ID da Sala" value={roomID} onChange={(e) => setRoomID(e.target.value)} />
+                <input type="text" className="container_input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
+            <button className="check_button" onClick={handleEnterRoom}> <img src={check} alt="Confirm" /> </button>
+
         </div>
     )
 }
