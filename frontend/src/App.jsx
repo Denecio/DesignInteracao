@@ -38,7 +38,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<EnterRoom socket={socket}/>} />
-        <Route path="/room/:id" element={isMobile ? <Loading text="Aguarda que todos os jogadores entrem na Sala" page="story" url="game-started" socket={socket}/> : <WaitingRoom socket={socket}/>} />
+        <Route path="/room/:id" element={isMobile ? <Loading text="Aguarda que todos os jogadores entrem na sala..." page="story" url="game-started" socket={socket}/> : <WaitingRoom socket={socket}/>} />
         {/*<Route path="/story/:id" element={isMobile ? <StoryGiver socket={socket}/> : <Loading text="Agora que cá estão todos, é hora de olhares para o teu telemóvel" socket={socket}/>} />*/}
         <Route path="/story/:id" element={<StoryGiver socket={socket}/>} />
         <Route path="/role/:id" element={<RoleGiver socket={socket}/>}/>
