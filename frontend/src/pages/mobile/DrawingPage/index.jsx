@@ -15,7 +15,7 @@ const DrawingPage = ({ socket }) => {
     const { id: roomID } = useParams();
     const [text, setText] = useState("")
     const [role, setRole] = useState("")
-    const [isDrawing, setIsDrawing] = useState(false);
+    const [color, setColor] = useState("#000000")
     const canvasRef = useRef(null);
     const username = localStorage.getItem("username");
     const navigate = useNavigate();
@@ -50,22 +50,22 @@ const DrawingPage = ({ socket }) => {
         });
 
         ButtonSound.addEventListener('ended', () => {
-            window.location.href = url;
+            if (canvasRef.current) {
+                console.log("Sending drawing...");
+                const imageData = canvasRef.current.getCanvasImage();
+                socket.emit('drawing', roomID, username, imageData, (response) => {
+                    if (response.success) {
+                        //console.log("Drawing sent successfully");
+                    } else {
+                        console.log(response.message || "Failed to send drawing");
+                    }
+                });
+            } else {
+                console.error('Canvas ref is not defined');
+            }
         });
-        if (canvasRef.current) {
-            const imageData = canvasRef.current.getCanvasImage();
-            socket.emit('drawing', roomID, username, imageData, (response) => {
-                if (response.success) {
-                    //console.log("Drawing sent successfully");
-                }
-            });
-        } else {
-            //console.error('Canvas ref is not defined');
-        }
-    }
-
-    const toggleDrawing = () => {
-        setIsDrawing(!isDrawing);
+        
+        
     }
 
     const clearCanvas = () => {
@@ -74,19 +74,18 @@ const DrawingPage = ({ socket }) => {
         }
     }
 
-
     return (
         <div className="drawingpage">
             {role === "Artist" ?
                 <div className="drawingpage_container">
                     <div className="buttons">
-                        <button className="btn-brush" onClick={toggleDrawing}> <img src={brush} alt="Confirm" /> </button>
-                        <button className="btn-eraser"> <img src={eraser} alt="Confirm" /> </button>
-                        <button className="btn-trash" nClick={clearCanvas}> <img src={trash} alt="Confirm" /> </button>
+                        <button className="btn-brush" onClick={() => setColor("#000")}> <img src={brush} alt="Confirm" /> </button>
+                        <button className="btn-eraser" onClick={() => setColor("#f5f5f5")}> <img src={eraser} alt="Confirm" /> </button>
+                        <button className="btn-trash" onClick={clearCanvas}> <img src={trash} alt="Confirm" /> </button>
                     </div>
                     <div className="drawing">
                         <p >{text ? text : "aosidaoidnaosnd"}</p>
-                        <Canvas ref={canvasRef} />
+                        <Canvas ref={canvasRef} color={color}/>
                     </div>
                     <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
                 </div> : <h1>Espera pela tua vez...</h1>}
