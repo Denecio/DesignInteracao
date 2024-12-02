@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
 
   socket.on('join-room', (roomID, username, callback) => {
     if (!rooms[roomID]) {
-        rooms[roomID] = { users: [], story: {}, arrangedFrames: [] };
+        rooms[roomID] = { users: [], story: {}, arrangedFrames: [] , shared: []};
     }
 
     // Check if the username is already taken
@@ -37,8 +37,10 @@ io.on('connection', (socket) => {
     socket.join(roomID);
 
     // Add the user to the room's users list
-    rooms[roomID].users.push({ username: username, role: 'Artist', story: '', img: '' });
-
+    if(username)
+      rooms[roomID].users.push({ username: username, role: 'Artist', story: '', img: '' });
+    else 
+      rooms[roomID].shared.push(socket.id);
     // Emit the updated list of users in the room
     io.to(roomID).emit('room-users', { users: rooms[roomID].users });
 

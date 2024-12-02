@@ -20,7 +20,7 @@ const EnterRoom = ({ socket }) => {
             return;
         }
 
-        if (!username) {
+        if (!username && window.innerWidth < 768) {
             alert('Please enter a username');
             return;
         }
@@ -49,7 +49,7 @@ const EnterRoom = ({ socket }) => {
         <div className="enterroom_page">
             <div className="enterroom_container">
                 <input type="text" className="container_input" placeholder="ID da Sala" value={roomID} onChange={(e) => setRoomID(e.target.value)} />
-                <input type="text" className="container_input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
+                {window.innerWidth < 768 && <input type="text" className="container_input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />}
             </div>
             <button className="check_button" onClick={handleEnterRoom}> <img src={check} alt="Confirm" /> </button>
 
