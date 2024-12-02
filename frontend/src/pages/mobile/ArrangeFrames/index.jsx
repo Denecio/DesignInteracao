@@ -14,76 +14,75 @@ import buttonsound from '../../../assets/sounds/button.mp3';
 
 const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
-    const [frames, setFrames] = useState([]);
-    const [role, setRole] = useState("");
-    const [timeLeft, setTimeLeft] = useState(30); // Timer 30s
-    const [canMoveFrames, setCanMoveFrames] = useState(true); // Flag to indicate if frames can be moved
-    const navigate = useNavigate();
+    const [frames, setFrames] = useState([])
+    const [role, setRole] = useState("")
+    const [timeLeft, setTimeLeft] = useState(30) // Timer 30s
+    const [canMoveFrames, setCanMoveFrames] = useState(true) // Flag to indicate if frames can be moved
+    const navigate = useNavigate()
     useEffect(() => {
 
         socket.emit('get-users', roomID, (response) => {
             if (response.success) {
-                const artistFrames = response.users
+                const artists = response.users
                 .filter(user => user.role === 'Artist')
-                .map(user => user.img);
-
-                setFrames(artistFrames);
-                setRole(response.users.filter(user => user.username === localStorage.getItem('username'))[0].role);
+                
+                setFrames(artists.map(user => ({ src: user.img, story: user.story })))
+                setRole(response.users.filter(user => user.username === localStorage.getItem('username'))[0].role)
             } else {
-                alert(response.message || 'Failed to get frames');
+                alert(response.message || 'Failed to get frames')
             }
         });
 
         const handleFrames = (data) => {
             //console.log("Frames arranged", data);
-            navigate(`/final/${roomID}`);
+            navigate(`/final/${roomID}`)
         }
 
-        socket.on("arranged-frames", handleFrames);
+        socket.on("arranged-frames", handleFrames)
 
         return () => {
-            socket.off("arranged-frames", handleFrames);
+            socket.off("arranged-frames", handleFrames)
         }
     }, [roomID])
 
     useEffect(() => {
         if (timeLeft > 0) {
-            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-            return () => clearTimeout(timer);
+            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
+            return () => clearTimeout(timer)
         } else {
-            setCanMoveFrames(false); 
+            setCanMoveFrames(false)
         }
-    }, [timeLeft]);
+    }, [timeLeft])
 
     const moveFrame = useCallback((dragIndex, hoverIndex) => {
         setFrames((prevFrames) => {
-            const updatedFrames = [...prevFrames];
-            const [draggedFrame] = updatedFrames.splice(dragIndex, 1); 
-            updatedFrames.splice(hoverIndex, 0, draggedFrame); 
-            return updatedFrames;
+            const updatedFrames = [...prevFrames]
+            const [draggedFrame] = updatedFrames.splice(dragIndex, 1);
+            updatedFrames.splice(hoverIndex, 0, draggedFrame);
+            return updatedFrames
         });
     }, []);
     
     const handleCheck = () => {
-        let ButtonSound = new Audio(buttonsound);
+        let ButtonSound = new Audio(buttonsound)
         ButtonSound.play().catch(error => {
-            console.error("Error playing button sound:", error);
+            console.error("Error playing button sound:", error)
         });
 
         ButtonSound.addEventListener('ended', () => {
-            window.location.href = url;
+            window.location.href = url
         });
 
         socket.emit("arrange-frames", roomID, frames, (response) => {
             if (response.success) {
                 //console.log("Frames arranged");
             } else {
-                alert(response.message || "Failed to arrange frames");
+                alert(response.message || "Failed to arrange frames")
             }
         });
 
         return () => {
-            socket.disconnect();
+            socket.disconnect()
         };
     }
 
@@ -100,7 +99,7 @@ const ArrangeFrames = ({socket}) => {
                             return <FinalFrames key={index}
                             index={index}
                             number={index + 1}
-                            src={frame}
+                            src={frame.src}
                             moveFrame={canMoveFrames ? moveFrame : null}
                             />
                         })}

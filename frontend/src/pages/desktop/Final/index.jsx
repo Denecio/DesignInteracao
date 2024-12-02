@@ -54,7 +54,12 @@ const Final = ({ socket }) => {
                 <p className="finaltext">Era uma vez...</p>
                 <div className="finalframes">
                     {frames?.map((frame, index) => {
-                        return <img className="finalframes_image" src={frame} alt="Frame" />
+                        return(
+                            <div key={index} className="final_frame">
+                                <img className="finalframes_image" src={frame.src} alt="Frame" />
+                                <p className="final_frame_text">{frame.story}</p>
+                            </div>
+                        )
                     })}
                 </div>
                 <button className="btn-end" onClick={handleCheck}> <p>Criar Nova Sala</p> </button>

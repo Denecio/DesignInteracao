@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     rooms[roomID].story = story.title
 
     let index = Math.floor(Math.random() * rooms[roomID].users.length)
-    rooms[roomID].users[0].role = 'Stage Setter'
+    rooms[roomID].users[index].role = 'Stage Setter'
 
     let artists = rooms[roomID].users.filter(user => user.role === 'Artist')
     let storyParts = story.story
