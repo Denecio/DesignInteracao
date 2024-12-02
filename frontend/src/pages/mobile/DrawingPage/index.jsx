@@ -15,7 +15,7 @@ const DrawingPage = ({ socket }) => {
     const { id: roomID } = useParams();
     const [text, setText] = useState("")
     const [role, setRole] = useState("")
-    const [color, setColor] = useState("#000000")
+    const [color, setColor] = useState("#000")
     const canvasRef = useRef(null);
     const username = localStorage.getItem("username");
     const navigate = useNavigate();
@@ -88,7 +88,9 @@ const DrawingPage = ({ socket }) => {
                         <Canvas ref={canvasRef} color={color}/>
                     </div>
                     <button className="check_button" onClick={handleEnter}> <img src={check} alt="Confirm" /> </button>
-                </div> : <h1>Espera pela tua vez...</h1>}
+                </div> :
+                <h1>Espera pela tua vez...</h1>
+            }
         </div>
     )
 }

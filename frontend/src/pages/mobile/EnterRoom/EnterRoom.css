@@ -30,9 +30,7 @@
   }
 
 
-  .check_button img {
-    width: 32px;
-  }
+  
 
 
 }
@@ -44,4 +42,8 @@
   border: none;
   background-color: #fff2d4;
   cursor: pointer;
+}
+
+.check_button img {
+  width: 32px;
 }

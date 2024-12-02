@@ -40,7 +40,7 @@ const Canvas = forwardRef((props, ref) => {
     ctx.strokeStyle = color;
     if(color === "#000")
       ctx.lineWidth = 2;
-    else ctx.lineWidth = 5;
+    else ctx.lineWidth = 10;
     ctx.stroke();
     ctx.closePath();
   };
