@@ -7,13 +7,23 @@ import check from "../../../assets/icons/check.svg";
 import { useNavigate } from 'react-router-dom';
 import playerlogin from '../../../assets/sounds/playerlogin.mp3';
 import buttonsound from '../../../assets/sounds/button.mp3';
+import drawing1 from "../../../assets/images/drawing1.png";
+import drawing2 from "../../../assets/images/drawing2.png";
+import drawing3 from "../../../assets/images/drawing3.png";
 
 const WaitingRoom = ({ socket }) => {
     const { id: roomID } = useParams();
     const [users, setUsers] = useState([]);
+    const [selectedDrawing, setSelectedDrawing] = useState(null);
     const navigate = useNavigate();
 
+    const drawings = [drawing1, drawing2, drawing3];
+
+
     useEffect(() => {
+        const randomIndex = Math.floor(Math.random() * drawings.length);
+        setSelectedDrawing(drawings[randomIndex]);
+
         // Emit a "load-room" event to the server with the room ID
         socket.emit("load-room", roomID, (response) => {
             if (response.success) {
@@ -77,8 +87,9 @@ const WaitingRoom = ({ socket }) => {
                         ))}
                     </ul>
                 </div>
-                <div className="waitingroom_placeholder">Enquanto esperas
-                    desenha alguma coisa aqui!</div>
+                <div className="waitingroom_placeholder">
+                    {selectedDrawing && <img src={selectedDrawing} alt="Random Drawing" />}
+                </div>
             </div>
             <div className="waintingroom_end">
                 <h3>Estão todos?</h3>
