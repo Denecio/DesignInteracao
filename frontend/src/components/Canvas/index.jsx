@@ -1,8 +1,6 @@
 import { useRef, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:8000'); // Connects to backend server
-
 const Canvas = forwardRef((props, ref) => {
   const canvasRef = useRef();
   const containerRef = useRef(null);
@@ -40,7 +38,9 @@ const Canvas = forwardRef((props, ref) => {
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1, y1);
     ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
+    if(color === "#000")
+      ctx.lineWidth = 2;
+    else ctx.lineWidth = 5;
     ctx.stroke();
     ctx.closePath();
   };
@@ -57,7 +57,7 @@ const Canvas = forwardRef((props, ref) => {
 
     const { offsetX, offsetY } = e.nativeEvent;
     const ctx = canvasRef.current.getContext('2d');
-    const color = 'black';
+    const color = props.color;
 
     drawLine(ctx, canvasRef.current.lastX, canvasRef.current.lastY, offsetX, offsetY, color);
     canvasRef.current.lastX = offsetX;
@@ -82,7 +82,7 @@ const Canvas = forwardRef((props, ref) => {
 
     const { x, y } = getTouchPos(e);
     const ctx = canvasRef.current.getContext('2d');
-    const color = 'black';
+    const color = props.color;
 
     drawLine(ctx, canvasRef.current.lastX, canvasRef.current.lastY, x, y, color);
     canvasRef.current.lastX = x;

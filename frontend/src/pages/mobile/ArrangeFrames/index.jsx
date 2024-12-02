@@ -90,7 +90,7 @@ const ArrangeFrames = ({socket}) => {
     return (
         
         <DndProvider backend={HTML5Backend}>
-            {role === "Artist" ? <h1>Espera pela tua vez</h1> : 
+            {role === "Artist" ? <h1 className="arrangeframes_holder">Espera pela tua vez</h1> : 
             <div className="arrangeframes_page">
                 <div className="arrangeframes_container">
                     <p className="arrangetext">Arrasta os frames para criar a história!</p>

@@ -11,7 +11,7 @@ import drawing1 from "../../../assets/images/drawing1.png";
 import drawing2 from "../../../assets/images/drawing2.png";
 import drawing3 from "../../../assets/images/drawing3.png";
 
-const WaitingRoom = ({socket}) => {
+const WaitingRoom = ({ socket }) => {
     const { id: roomID } = useParams();
     const [users, setUsers] = useState([]);
     const [selectedDrawing, setSelectedDrawing] = useState(null);
@@ -32,7 +32,7 @@ const WaitingRoom = ({socket}) => {
                 alert(response.message || "Failed to load room");
             }
         });
-    
+
         // Listen for "room-users" events from the server
         const handleRoomUsers = (data) => {
             //console.log("Received 'room-users':", data);
@@ -42,7 +42,7 @@ const WaitingRoom = ({socket}) => {
                 console.error("Error playing login sound:", error);
             });
         };
-    
+
         socket.on("room-users", handleRoomUsers);
 
         const handleGameStarted = (data) => {
@@ -59,7 +59,7 @@ const WaitingRoom = ({socket}) => {
             socket.off("game-started", handleGameStarted);
         };
     }, [roomID, socket]);
-    
+
     const handleCheck = () => {
 
         let ButtonSound = new Audio(buttonsound);
@@ -71,7 +71,7 @@ const WaitingRoom = ({socket}) => {
         socket.emit("start-game", roomID, (response) => {
             if (!response.success) {
                 alert(response.message || "Failed to start game");
-            }      
+            }
         })
     }
 

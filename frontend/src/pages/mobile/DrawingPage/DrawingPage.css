@@ -7,6 +7,7 @@
     align-items: center;
     gap: 25px;
     justify-content: center;
+    color: #FFF2D4;
   }
 
 
@@ -70,6 +71,7 @@
     height: 100%;
     border: 1px solid #fff2d4;
     border-radius: 20px;
+    background-color: whitesmoke;
   }
 
   .btn-enter {

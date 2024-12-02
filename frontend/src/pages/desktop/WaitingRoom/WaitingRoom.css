@@ -1,4 +1,4 @@
-.waitingroom_page{
+.waitingroom_page {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,44 +7,47 @@
     width: 100%;
     padding: 0 10%;
     gap: 20px;
+    color: #FFF2D4;
 }
 
-.waitingroom_content{
+.waitingroom_content {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    border: 2px solid black;
+    border: 2px solid #FFF2D4;
     padding: 3rem;
     border-radius: 1rem;
     height: 50%;
     gap: 5rem;
 }
 
-.waitingroom_info{
+.waitingroom_info {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     min-width: 40%;
+
 }
 
-.waitingroom_players{
+.waitingroom_players {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
 }
 
-.waitingroom_placeholder{
+.waitingroom_placeholder {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     width: -webkit-fill-available;
-    background-color: #E2E2E2;
-    color: white;
+    background-color: #FFF2D4;
+    color: black;
     border-radius: 1rem;
 }
 
-.waintingroom_end{
+.waintingroom_end {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -52,13 +55,13 @@
     width: 100%;
 }
 
-.waintingroom_end h3{
+.waintingroom_end h3 {
     min-width: max-content;
 }
 
-.waintingroom_end div{
+.waintingroom_end div {
     height: 1px;
-    background-color: black;
+    background-color: #FFF2D4;
     width: -webkit-fill-available;
 
 }

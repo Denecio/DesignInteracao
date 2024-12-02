@@ -16,10 +16,18 @@ const Loading = ({text, page, url, socket}) => {
             navigate(`/story/${roomID}`);
         };
 
+        const handleGameEnded = (data) => {
+            console.log("Received 'game-ended':", data);
+            // Handle game start (e.g., navigate to the next page)
+            navigate(`/`);
+        };
+
         socket.on("game-started", handleGameStarted);
+        socket.on("game-ended", handleGameEnded);
 
         return () => {
             socket.off("game-started", handleGameStarted);
+            socket.off("game-ended", handleGameEnded);
         }
     }, [roomID, socket]);
 
