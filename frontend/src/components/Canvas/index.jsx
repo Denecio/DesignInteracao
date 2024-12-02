@@ -1,8 +1,6 @@
 import { useRef, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:8000'); // Connects to backend server
-
 const Canvas = forwardRef((props, ref) => {
   const canvasRef = useRef();
   const containerRef = useRef(null);
