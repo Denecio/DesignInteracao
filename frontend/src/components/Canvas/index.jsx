@@ -90,6 +90,7 @@ const Canvas = forwardRef((props, ref) => {
   };
 
   const handleTouchEnd = () => {
+    e.preventDefault();
     setIsDrawing(false);
   };
 
@@ -113,7 +114,7 @@ const Canvas = forwardRef((props, ref) => {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', touchAction: 'none' }}
       />
     </div>
   );

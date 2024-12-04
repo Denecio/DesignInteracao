@@ -14,9 +14,12 @@ const RoleGiver = ({socket}) => {
         socket.emit("get-users", roomID, (response) => {
             if (response.success) {
                 let username = localStorage.getItem("username");
-                let user = response.users.find(user => user.username === username);
+                let user = response.users.find(user => user.username === username)
                 setRole(user.role);
-                setUrl(`/drawing/${roomID}`);
+                if(user.role !== "Artist")
+                    setUrl(`/drawing/${roomID}`)
+                else
+                    setUrl(`/story/${roomID}`)
             } else {
                 alert(response.message || "Failed to get story");
             }

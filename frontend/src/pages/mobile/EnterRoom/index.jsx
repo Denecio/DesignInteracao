@@ -47,6 +47,7 @@ const EnterRoom = ({ socket }) => {
 
     return (
         <div className="enterroom_page">
+            <h1 className="enterroom_title">{window.innerWidth > 768 ? "Cria a tua sala!" : "Entra na tua sala!"}</h1>
             <div className="enterroom_container">
                 <input type="text" className="container_input" placeholder="ID da Sala" value={roomID} onChange={(e) => setRoomID(e.target.value)} />
                 {window.innerWidth < 768 && <input type="text" className="container_input" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />}

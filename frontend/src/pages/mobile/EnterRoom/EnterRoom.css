@@ -8,6 +8,11 @@
   justify-content: center
 }
 
+.enterroom_title{
+  font-size: 2rem;
+  color: #fff2d4;
+}
+
 
 .enterroom_container {
   width: 70%;

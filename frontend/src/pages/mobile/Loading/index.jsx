@@ -13,7 +13,7 @@ const Loading = ({text, page, url, socket}) => {
         const handleGameStarted = (data) => {
             console.log("Received 'game-started':", data);
             // Handle game start (e.g., navigate to the next page)
-            navigate(`/story/${roomID}`);
+            navigate(`/role/${roomID}`);
         };
 
         const handleGameEnded = (data) => {
