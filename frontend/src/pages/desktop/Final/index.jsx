@@ -11,20 +11,23 @@ const Final = ({ socket }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        socket.emit('get-arranged-frames', roomID, (response) => {
-            if (response.success) {
-                console.log(response.frames);
-                setFrames(response.frames);
-            } else {
-                alert(response.message || 'Failed to get frames');
-            }
-        });
+        const handleGetArrangedFrames = () => {
+            socket.emit('get-arranged-frames', roomID, (response) => {
+                if (response.success) {
+                    console.log(response.frames);
+                    setFrames(response.frames);
+                } else {
+                    alert(response.message || 'Failed to get frames');
+                }
+            })
+        }
+        
 
         const handleGameEnded = () => {
-            console.log("Game ended");
             navigate(`/`);
         }
 
+        socket.on("arranged-frames", handleGetArrangedFrames);
         socket.on("game-ended", handleGameEnded);
 
         return () => {

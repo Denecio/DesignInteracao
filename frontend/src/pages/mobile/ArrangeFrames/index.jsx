@@ -3,14 +3,29 @@ import "../../../App.css"
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams } from "react-router-dom"
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { useNavigate } from 'react-router-dom';
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import { TouchBackend } from "react-dnd-touch-backend"
+import { MultiBackend, TouchTransition } from "react-dnd-multi-backend"
+import { useNavigate } from 'react-router-dom'
 
 import check from "../../../assets/icons/check.png"
 import FinalFrames from "../../../components/FinalFrames"
-import buttonsound from '../../../assets/sounds/button.mp3';
+import buttonsound from '../../../assets/sounds/button.mp3'
 
+const backendOptions = {
+    backends: [
+        {
+            backend: HTML5Backend,
+        },
+        {
+            backend: TouchBackend,
+            options: { enableMouseEvents: true },
+            preview: true,
+            transition: TouchTransition,
+        },
+    ],
+}
 
 const ArrangeFrames = ({socket}) => {
     const { id: roomID } = useParams();
@@ -19,6 +34,7 @@ const ArrangeFrames = ({socket}) => {
     const [timeLeft, setTimeLeft] = useState(30) // Timer 30s
     const [canMoveFrames, setCanMoveFrames] = useState(true) // Flag to indicate if frames can be moved
     const navigate = useNavigate()
+    
     useEffect(() => {
 
         socket.emit('get-users', roomID, (response) => {
@@ -88,25 +104,33 @@ const ArrangeFrames = ({socket}) => {
 
     return (
         
-        <DndProvider backend={HTML5Backend}>
-            {role === "Artist" ? <h1 className="arrangeframes_holder">Espera pela tua vez</h1> : 
-            <div className="arrangeframes_page">
-                <div className="arrangeframes_container">
-                    <p className="arrangetext">Arrasta os frames para criar a história!</p>
-                    <p className="timer">Tempo Restante: {timeLeft} segundos</p>
-                    <div className="arrangeframes_frames">
-                        {frames.map((frame, index) => {
-                            return <FinalFrames key={index}
-                            index={index}
-                            number={index + 1}
-                            src={frame.src}
-                            moveFrame={canMoveFrames ? moveFrame : null}
-                            />
-                        })}
+        <DndProvider backend={MultiBackend} options={backendOptions}>
+            {role === "Artist" ? (
+                <h1 className="arrangeframes_holder">Espera pela tua vez</h1>
+            ) : (
+                <div className="arrangeframes_page">
+                    <div className="arrangeframes_container">
+                        <p className="arrangetext">Arrasta os frames para criar a história!</p>
+                        <p className="timer">Tempo Restante: {timeLeft} segundos</p>
+                        <div className="arrangeframes_frames">
+                            {frames.map((frame, index) => {
+                                return (
+                                    <FinalFrames
+                                        key={index}
+                                        index={index}
+                                        number={index + 1}
+                                        src={frame.src}
+                                        moveFrame={canMoveFrames ? moveFrame : null}
+                                    />
+                                );
+                            })}
+                        </div>
                     </div>
+                    <button className="check_button" onClick={handleCheck}>
+                        <img src={check} alt="Confirm" />
+                    </button>
                 </div>
-                <button className="check_button" onClick={handleCheck}> <img src={check} alt="Confirm" /> </button>
-            </div>}
+            )}
         </DndProvider>
     )
 }

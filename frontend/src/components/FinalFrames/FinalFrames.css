@@ -3,6 +3,7 @@
     width: 80%;
     cursor: grab;
     transition: opacity 0.2s;
+    touch-action: none;
 }
   
 .final_frames:active {
