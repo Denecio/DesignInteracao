@@ -1,9 +1,3 @@
-#root:has(.drawingpage){
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
 .drawingpage {
   height: 100dvh;
   width: 100dvw;
